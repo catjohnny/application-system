@@ -16,11 +16,31 @@
     min-height: 100vh;
     padding: 30px 15px;
   }
-  h1 {
-    color: #5dc1ff;
+
+  /* 🔹 標題區塊樣式 */
+  header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
   }
+
+  /* 🔹 上方圖片樣式（局6.png） */
+  header img {
+    width: 100px; /* ✅ 想改大小可調這裡 */
+    height: auto;
+    margin-bottom: 10px;
+  }
+
+  /* 🔹 標題文字樣式 */
+  .title-line {
+    margin: 4px 0;
+    font-weight: bold;
+  }
+
+  .title-line:first-child { font-size: 22px; color: #5dc1ff; }
+  .title-line:nth-child(2) { font-size: 24px; color: #79d0ff; }
+  .title-line:nth-child(3) { font-size: 20px; color: #a4e4ff; }
+
+  /* 🔹 查詢框樣式 */
   .search-box {
     background-color: #1b1b1b;
     border-radius: 10px;
@@ -62,15 +82,20 @@
   button:hover {
     background-color: #79d0ff;
   }
+
+  /* 🔹 查詢結果樣式 */
   .result {
     margin-top: 25px;
-    font-size: 18px;
     background: #1b1b1b;
     padding: 15px;
     border-radius: 10px;
     text-align: center;
     line-height: 1.6;
+    color: #fff;
+    /* ✅【查詢結果字體大小】想變大請修改這行 */
+    font-size: 22px;
   }
+
   .not-found {
     color: #ff5252;
     font-weight: bold;
@@ -79,8 +104,15 @@
 </head>
 <body>
 
-<h1>第四大隊消防夏令營報名查詢系統</h1>
+<!-- 🔹 標題區塊 -->
+<header>
+  <img src="局6.png" alt="消防局徽">
+  <div class="title-line">新北市政府消防局</div>
+  <div class="title-line">第四大隊</div>
+  <div class="title-line">消防夏令營報名查詢系統</div>
+</header>
 
+<!-- 🔹 查詢輸入區 -->
 <div class="search-box">
   <label for="name">請輸入孩童姓名</label>
   <input type="text" id="name" placeholder="例如：王小明">
