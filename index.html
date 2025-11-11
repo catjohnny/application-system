@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第四大隊消防夏令營報名查詢系統</title>
+<style>
+  body {
+    background-color: #111;
+    color: #fff;
+    font-family: "Noto Sans TC", Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 30px 15px;
+  }
+  h1 {
+    color: #5dc1ff;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .search-box {
+    background-color: #1b1b1b;
+    border-radius: 10px;
+    padding: 25px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 0 15px rgba(93, 193, 255, 0.3);
+  }
+  label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #ccc;
+    text-align: center;
+  }
+  input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background-color: #222;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    outline: none;
+  }
+  button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #5dc1ff;
+    color: #000;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #79d0ff;
+  }
+  .result {
+    margin-top: 25px;
+    font-size: 18px;
+    background: #1b1b1b;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 1.6;
+  }
+  .not-found {
+    color: #ff5252;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<h1>第四大隊消防夏令營報名查詢系統</h1>
+
+<div class="search-box">
+  <label for="name">請輸入孩童姓名</label>
+  <input type="text" id="name" placeholder="例如：王小明">
+  <button onclick="searchName()">查詢</button>
+  <div id="result" class="result"></div>
+</div>
+
+<script>
+const apiUrl = "https://script.google.com/macros/s/【換成你部署的 Apps Script 網址】/exec";
+
+async function searchName() {
+  const name = document.getElementById("name").value.trim();
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = "🔍 查詢中...";
+
+  if (!name) {
+    resultDiv.innerHTML = "<span class='not-found'>⚠️ 請輸入姓名！</span>";
+    return;
+  }
+
+  try {
+    const res = await fetch(`${apiUrl}?name=${encodeURIComponent(name)}`);
+    const data = await res.json();
+
+    if (data.length === 0) {
+      resultDiv.innerHTML = `<span class='not-found'>查無相關姓名。</span>`;
+    } else {
+      resultDiv.innerHTML = data.map(item => 
+        `<div><strong>${item.name}</strong><br>${item.result}</div>`
+      ).join("<hr>");
+    }
+  } catch (err) {
+    resultDiv.innerHTML = "<span class='not-found'>❌ 無法連線，請稍後再試。</span>";
+  }
+}
+</script>
+
+</body>
+</html>
