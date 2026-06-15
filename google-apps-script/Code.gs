@@ -17,6 +17,10 @@ function doGet(e) {
       return jsonResponse(updateStatus(params.q || params.name || params.phone || "", params.status || ""));
     }
 
+    if (action === "updateStatusByRow") {
+      return jsonResponse(updateStatusByRow(params.rowNumber || "", params.status || ""));
+    }
+
     if (action === "phoneByName") {
       return jsonResponse({
         success: true,
@@ -106,6 +110,44 @@ function updateStatus(query, status) {
   };
 }
 
+function updateStatusByRow(rowNumber, status) {
+  const row = Number(rowNumber);
+  const targetStatus = String(status || "").trim();
+  if (!Number.isInteger(row) || row < 2) {
+    return { success: false, message: "資料列錯誤，請重新查詢" };
+  }
+
+  if (targetStatus && targetStatus !== "已報到" && targetStatus !== "離場") {
+    return { success: false, message: "狀態只能是已報到、離場或空白" };
+  }
+
+  const sheet = getSheet();
+  const lastRow = sheet.getLastRow();
+  if (row > lastRow) {
+    return { success: false, message: "查無資料，請重新查詢" };
+  }
+
+  const values = sheet.getRange(row, 1, 1, 4).getValues()[0];
+  const item = {
+    rowNumber: row,
+    name: String(values[0] || "").trim(),
+    phone: String(values[1] || "").trim(),
+    team: String(values[2] || "").trim(),
+    status: targetStatus
+  };
+
+  if (!item.name && !item.phone) {
+    return { success: false, message: "查無資料，請重新查詢" };
+  }
+
+  sheet.getRange(row, 4).setValue(targetStatus);
+
+  return {
+    success: true,
+    item: toPublicItem(item)
+  };
+}
+
 function findPhoneByName(name) {
   const keyword = String(name || "").trim();
   if (!keyword) return [];
@@ -141,6 +183,7 @@ function getStatusLists() {
 
 function toPublicItem(item) {
   return {
+    rowNumber: item.rowNumber,
     name: item.name,
     phone: item.phone,
     team: item.team,
