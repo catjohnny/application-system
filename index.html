@@ -1,156 +1,568 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>第四大隊消防夏令營報名查詢系統</title>
-<style>
-  body {
-    background-color: #111;
-    color: #fff;
-    font-family: "Noto Sans TC", Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    padding: 30px 15px;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>消防局兒童夏令營工作人員系統</title>
+  <style>
+    :root {
+      --bg: #101214;
+      --panel: #1a1f24;
+      --panel-2: #222932;
+      --line: #34404d;
+      --text: #f8fafc;
+      --muted: #b9c3cf;
+      --gold: #ffd469;
+      --gold-2: #f0c14a;
+      --blue: #4fb3ff;
+      --green: #5ee094;
+      --red: #ff6b6b;
+    }
 
-  /* 🔹 標題區塊樣式 */
-  header {
-    text-align: center;
-    margin-bottom: 30px;
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  /* 🔹 上方圖片樣式（局6.png） */
-  header img {
-    width: 100px; /* ✅ 想改大小可調這裡 */
-    height: auto;
-    margin-bottom: 10px;
-  }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+    }
 
-  /* 🔹 標題文字樣式 */
-  .title-line {
-    margin: 4px 0;
-    font-weight: bold;
-    line-height: 1.2;  /* ✅ ← 調整這裡：1.2~2.0之間都可，數值越大行距越寬 */
-  }
+    .page {
+      width: min(1100px, 100%);
+      margin: 0 auto;
+      padding: 28px 16px 42px;
+    }
 
-  .title-line:nth-of-type(1) { font-size: 35px; color: #ffd469; }
-  .title-line:nth-of-type(2) { font-size: 22px; color: #ffd469; }
-  .title-line:nth-of-type(3) { font-size: 27px; color: #ffffff; }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding-bottom: 24px;
+      text-align: left;
+    }
 
-  /* 🔹 查詢框樣式 */
-  .search-box {
-    background-color: #1b1b1b;
-    border-radius: 10px;
-    padding: 25px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 0 15px rgba(93, 193, 255, 0.3);
-  }
-  label {
-    display: block;
-    font-size: 16px;
-    margin-bottom: 8px;
-    color: #ccc;
-    text-align: center;
-  }
-  input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #444;
-    background-color: #222;
-    color: #fff;
-    font-size: 16px;
-    text-align: center;
-    outline: none;
-    box-sizing: border-box;
-  }
-  button {
-    margin-top: 15px;
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background-color: #f0c14a;
-    color: #000;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  button:hover {
-    background-color: #fcdc8b;
-  }
+    header img {
+      width: 86px;
+      height: auto;
+      flex: 0 0 auto;
+    }
 
-  /* 🔹 查詢結果樣式 */
-  .result {
-    margin-top: 25px;
-    background: #1b1b1b;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    line-height: 1.6;
-    color: #fff;
-    /* ✅【查詢結果字體大小】想變大請修改這行 */
-    font-size: 26px;
-  }
+    h1 {
+      margin: 0;
+      color: var(--gold);
+      font-size: clamp(28px, 5vw, 46px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
 
-  .not-found {
-    color: #ff5252;
-    font-weight: bold;
-  }
-</style>
+    .subtitle {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .role-button,
+    button {
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 700;
+    }
+
+    .role-button {
+      min-height: 96px;
+      padding: 18px 14px;
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--line);
+      font-size: 22px;
+    }
+
+    .role-button.active {
+      background: #2b2411;
+      border-color: var(--gold-2);
+      color: var(--gold);
+    }
+
+    .panel {
+      display: none;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    h2,
+    h3 {
+      margin: 0 0 14px;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-size: 28px;
+      color: var(--gold);
+    }
+
+    h3 {
+      font-size: 21px;
+      color: var(--text);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    input {
+      width: 100%;
+      height: 48px;
+      border-radius: 8px;
+      border: 1px solid #46525f;
+      background: #11161c;
+      color: var(--text);
+      padding: 0 14px;
+      font-size: 18px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(79, 179, 255, 0.16);
+    }
+
+    button {
+      min-height: 48px;
+      padding: 0 18px;
+      background: var(--gold-2);
+      color: #101214;
+      font-size: 18px;
+      white-space: nowrap;
+    }
+
+    button.secondary {
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    button.checkin {
+      background: var(--green);
+      color: #07130b;
+    }
+
+    button.checkout {
+      background: var(--red);
+      color: #1c0707;
+    }
+
+    .action-pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .result {
+      min-height: 52px;
+      margin-top: 12px;
+      padding: 14px;
+      background: #11161c;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 18px;
+    }
+
+    .result:empty {
+      display: none;
+    }
+
+    .result strong {
+      color: var(--gold);
+    }
+
+    .error {
+      color: var(--red);
+      font-weight: 700;
+    }
+
+    .ok {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .sections {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 16px;
+    }
+
+    .subsection {
+      padding: 16px;
+      background: #151a20;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .status-tools {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .status-list {
+      min-height: 180px;
+      background: #11161c;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .status-list h4 {
+      margin: 0;
+      padding: 10px;
+      background: var(--panel-2);
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .status-list ul {
+      list-style: none;
+      margin: 0;
+      padding: 8px 10px 12px;
+    }
+
+    .status-list li {
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      color: var(--text);
+    }
+
+    .status-list li:last-child {
+      border-bottom: 0;
+    }
+
+    .empty {
+      color: var(--muted);
+    }
+
+    @media (max-width: 760px) {
+      header {
+        align-items: flex-start;
+      }
+
+      header img {
+        width: 68px;
+      }
+
+      .role-grid,
+      .form-row,
+      .sections,
+      .status-grid,
+      .action-pair {
+        grid-template-columns: 1fr;
+      }
+
+      .role-button {
+        min-height: 72px;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
+  <main class="page">
+    <header>
+      <img src="局6.png" alt="消防局標誌">
+      <div>
+        <h1>消防局兒童夏令營<br>工作人員系統</h1>
+        <div class="subtitle">報到、離場、查詢與報名狀況管理</div>
+      </div>
+    </header>
 
-<!-- 🔹 標題區塊 -->
-<header>
-  <img src="局6.png" alt="消防局徽">
-  <div class="title-line">新北市政府消防局</div>
-  <div class="title-line">第四大隊</div>
-  <div class="title-line">消防夏令營報名查詢系統</div>
-</header>
+    <nav class="role-grid" aria-label="工作功能">
+      <button class="role-button active" type="button" data-panel="attendance">報到與離場</button>
+      <button class="role-button" type="button" data-panel="lookup">查詢人員</button>
+      <button class="role-button" type="button" data-panel="registration">報名狀況</button>
+    </nav>
 
-<!-- 🔹 查詢輸入區 -->
-<div class="search-box">
-  <label for="name">請輸入孩童姓名</label>
-  <input type="text" id="name" placeholder="例如：王小明">
-  <button onclick="searchName()">查詢</button>
-  <div id="result" class="result"></div>
-</div>
+    <section id="attendance" class="panel active">
+      <h2>報到與離場</h2>
+      <div class="form-row">
+        <div>
+          <label for="attendanceQuery">輸入小朋友姓名或報名電話</label>
+          <input id="attendanceQuery" type="text" autocomplete="off" placeholder="例如：王小明 或 0912345678">
+        </div>
+        <button class="secondary" type="button" onclick="previewAttendance()">查詢</button>
+      </div>
+      <div class="action-pair">
+        <button class="checkin" type="button" onclick="updateAttendance('已報到')">報到</button>
+        <button class="checkout" type="button" onclick="updateAttendance('離場')">離場</button>
+      </div>
+      <div id="attendanceResult" class="result"></div>
+    </section>
 
-<script>
-const apiUrl = "https://script.google.com/macros/s/AKfycbz0V6OrsqvCaA02-Z5j719g9Dh_96D8ytJqfX9QmY-cw0CbhJ64nzpXjiwtJ3NBKU1ZGQ/exec";
+    <section id="lookup" class="panel">
+      <h2>查詢人員</h2>
+      <div class="form-row">
+        <div>
+          <label for="lookupQuery">輸入姓名或電話，查詢小隊與編號</label>
+          <input id="lookupQuery" type="text" autocomplete="off" placeholder="姓名或報名電話">
+        </div>
+        <button type="button" onclick="lookupChild()">查詢</button>
+      </div>
+      <div id="lookupResult" class="result"></div>
+    </section>
 
-async function searchName() {
-  const name = document.getElementById("name").value.trim();
-  const resultDiv = document.getElementById("result");
-  resultDiv.innerHTML = "🔍 查詢中...";
+    <section id="registration" class="panel">
+      <h2>報名狀況</h2>
+      <div class="sections">
+        <div class="subsection">
+          <h3>小朋友查詢系統</h3>
+          <div class="form-row">
+            <div>
+              <label for="phoneName">輸入姓名，查詢聯絡電話</label>
+              <input id="phoneName" type="text" autocomplete="off" placeholder="小朋友姓名">
+            </div>
+            <button type="button" onclick="lookupPhone()">查詢</button>
+          </div>
+          <div id="phoneResult" class="result"></div>
+        </div>
 
-  if (!name) {
-    resultDiv.innerHTML = "<span class='not-found'>⚠️ 請輸入姓名！</span>";
-    return;
-  }
+        <div class="subsection">
+          <h3>報到與離場狀態名單</h3>
+          <div class="status-tools">
+            <button class="secondary" type="button" onclick="loadStatusLists()">重新整理</button>
+          </div>
+          <div class="status-grid">
+            <div class="status-list">
+              <h4>尚未報到</h4>
+              <ul id="notCheckedInList"></ul>
+            </div>
+            <div class="status-list">
+              <h4>已報到</h4>
+              <ul id="checkedInList"></ul>
+            </div>
+            <div class="status-list">
+              <h4>已離場</h4>
+              <ul id="leftList"></ul>
+            </div>
+          </div>
+          <div id="statusResult" class="result"></div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-  try {
-    const res = await fetch(`${apiUrl}?name=${encodeURIComponent(name)}`);
-    const data = await res.json();
+  <script>
+    const apiUrl = "https://script.google.com/macros/s/AKfycbz0V6OrsqvCaA02-Z5j719g9Dh_96D8ytJqfX9QmY-cw0CbhJ64nzpXjiwtJ3NBKU1ZGQ/exec";
 
-    if (data.length === 0) {
-      resultDiv.innerHTML = `<span class='not-found'>查無相關姓名。</span>`;
-    } else {
-      resultDiv.innerHTML = data.map(item => 
-        `<div><strong>${item.name}</strong><br>${item.result}</div>`
-      ).join("<hr>");
+    document.querySelectorAll(".role-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".role-button").forEach((item) => item.classList.remove("active"));
+        document.querySelectorAll(".panel").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        document.getElementById(button.dataset.panel).classList.add("active");
+        if (button.dataset.panel === "registration") {
+          loadStatusLists();
+        }
+      });
+    });
+
+    async function requestApi(params) {
+      const url = new URL(apiUrl);
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          url.searchParams.set(key, value);
+        }
+      });
+      const response = await fetch(url.toString());
+      if (!response.ok) {
+        throw new Error("API request failed");
+      }
+      return response.json();
     }
-  } catch (err) {
-    resultDiv.innerHTML = "<span class='not-found'>❌ 無法連線，請稍後再試。</span>";
-  }
-}
-</script>
 
+    function setResult(id, html) {
+      document.getElementById(id).innerHTML = html;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function normalizeItems(data) {
+      if (Array.isArray(data)) return data;
+      if (Array.isArray(data?.items)) return data.items;
+      if (data?.item) return [data.item];
+      return [];
+    }
+
+    function renderChildItems(items, emptyText) {
+      if (!items.length) {
+        return `<span class="error">${emptyText}</span>`;
+      }
+      return items.map((item) => {
+        const name = escapeHtml(item.name || item.姓名 || "");
+        const phone = escapeHtml(item.phone || item.telephone || item.電話 || "");
+        const team = escapeHtml(item.team || item.result || item.隊伍 || "");
+        const status = escapeHtml(item.status || item.狀態 || "");
+        return `<div><strong>${name}</strong><br>電話：${phone || "未提供"}<br>隊伍與編號：${team || "未提供"}<br>狀態：${status || "尚未報到"}</div>`;
+      }).join("<hr>");
+    }
+
+    async function lookupChild() {
+      const query = document.getElementById("lookupQuery").value.trim();
+      if (!query) {
+        setResult("lookupResult", '<span class="error">請輸入姓名或電話</span>');
+        return;
+      }
+
+      setResult("lookupResult", "查詢中...");
+      try {
+        const data = await requestApi({ action: "lookup", q: query, name: query });
+        setResult("lookupResult", renderChildItems(normalizeItems(data), "查無資料"));
+      } catch (error) {
+        setResult("lookupResult", '<span class="error">查詢失敗，請確認 Google Apps Script 已更新並重新部署</span>');
+      }
+    }
+
+    async function previewAttendance() {
+      const query = document.getElementById("attendanceQuery").value.trim();
+      if (!query) {
+        setResult("attendanceResult", '<span class="error">請輸入姓名或電話</span>');
+        return;
+      }
+
+      setResult("attendanceResult", "查詢中...");
+      try {
+        const data = await requestApi({ action: "lookup", q: query, name: query });
+        setResult("attendanceResult", renderChildItems(normalizeItems(data), "查無資料，無法報到或離場"));
+      } catch (error) {
+        setResult("attendanceResult", '<span class="error">查詢失敗，請確認 Google Apps Script 已更新並重新部署</span>');
+      }
+    }
+
+    async function updateAttendance(status) {
+      const query = document.getElementById("attendanceQuery").value.trim();
+      if (!query) {
+        setResult("attendanceResult", '<span class="error">請輸入姓名或電話</span>');
+        return;
+      }
+
+      setResult("attendanceResult", `${status}更新中...`);
+      try {
+        const data = await requestApi({ action: "updateStatus", q: query, status });
+        if (data.success !== true) {
+          setResult("attendanceResult", `<span class="error">${escapeHtml(data.message || "更新失敗，請確認 Google Apps Script 已更新並重新部署")}</span>`);
+          return;
+        }
+        const items = normalizeItems(data);
+        const detail = items.length ? renderChildItems(items, "已更新") : "";
+        setResult("attendanceResult", `<span class="ok">${status}更新完成</span>${detail ? `<hr>${detail}` : ""}`);
+      } catch (error) {
+        setResult("attendanceResult", '<span class="error">更新失敗，請確認 Google Apps Script 已支援 updateStatus 並重新部署</span>');
+      }
+    }
+
+    async function lookupPhone() {
+      const name = document.getElementById("phoneName").value.trim();
+      if (!name) {
+        setResult("phoneResult", '<span class="error">請輸入姓名</span>');
+        return;
+      }
+
+      setResult("phoneResult", "查詢中...");
+      try {
+        const data = await requestApi({ action: "phoneByName", name });
+        const items = normalizeItems(data);
+        if (!items.length) {
+          setResult("phoneResult", '<span class="error">查無資料</span>');
+          return;
+        }
+        setResult("phoneResult", items.map((item) => {
+          const itemName = escapeHtml(item.name || item.姓名 || "");
+          const phone = escapeHtml(item.phone || item.telephone || item.電話 || "");
+          return `<div><strong>${itemName}</strong><br>聯絡電話：${phone || "未提供"}</div>`;
+        }).join("<hr>"));
+      } catch (error) {
+        setResult("phoneResult", '<span class="error">查詢失敗，請確認 Google Apps Script 已更新並重新部署</span>');
+      }
+    }
+
+    function renderStatusList(id, items) {
+      const list = document.getElementById(id);
+      if (!items.length) {
+        list.innerHTML = '<li class="empty">目前無資料</li>';
+        return;
+      }
+      list.innerHTML = items.map((item) => {
+        const name = escapeHtml(item.name || item.姓名 || "");
+        const team = escapeHtml(item.team || item.result || item.隊伍 || "");
+        return `<li><strong>${name}</strong>${team ? `<br>${team}` : ""}</li>`;
+      }).join("");
+    }
+
+    async function loadStatusLists() {
+      setResult("statusResult", "名單載入中...");
+      try {
+        const data = await requestApi({ action: "statusLists" });
+        if (!data || Array.isArray(data) || !("notCheckedIn" in data)) {
+          throw new Error("Backend does not support statusLists");
+        }
+        renderStatusList("notCheckedInList", data.notCheckedIn || []);
+        renderStatusList("checkedInList", data.checkedIn || []);
+        renderStatusList("leftList", data.left || data.leftCamp || []);
+        setResult("statusResult", "");
+      } catch (error) {
+        renderStatusList("notCheckedInList", []);
+        renderStatusList("checkedInList", []);
+        renderStatusList("leftList", []);
+        setResult("statusResult", '<span class="error">名單載入失敗，請確認 Google Apps Script 已支援 statusLists 並重新部署</span>');
+      }
+    }
+  </script>
 </body>
 </html>
